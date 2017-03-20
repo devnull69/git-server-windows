@@ -1,6 +1,6 @@
 {
   "name": "git-server-windows",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Remote Git Server for Windows",
   "main": "git-server-windows.js",
   "dependencies": {
