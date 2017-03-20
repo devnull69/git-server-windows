@@ -1,8 +1,8 @@
-var Git = require('./git-server-windows');
+var Git = require('git-server-windows');
 
 var myUser = new Git.User({
-   username: "xxxxxxxxxxxxxxxxx",
-   password: "yyyyyyyyy"
+   username: "xxxxxxxxxxxxxxxxxx",
+   password: "yyyyyyyyyyyy"
 });
 
 Git.server({
