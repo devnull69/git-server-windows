@@ -17,6 +17,7 @@ exports.User = function(config) {
 };
 
 exports.server = function(config) {
+   var config = config || {};
    port = config.port || 8080;
    baseURL = config.baseURL || "/git";
    repoDir = config.repoDir || "repos";
