@@ -52,6 +52,7 @@ function checkAuth(req, res, next) {
       users = repositories[reponame];
    
    if(users.length > 0) {
+      console.log("Authenticating user for " + reponame + " ...");
       var basic = auth.basic({
             realm: "Web."
          }, (username, password, callback) => {
