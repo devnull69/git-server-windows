@@ -52,10 +52,10 @@ function checkAuth(req, res, next) {
       users = repositories[reponame];
    
    if(users.length > 0) {
-      console.log("Authenticating user for " + reponame + " ...");
       var basic = auth.basic({
             realm: "Web."
          }, (username, password, callback) => {
+            console.log("Authenticating user " + username + " for " + reponame + " ...");
             var passed = false;
             for(i=0; i<users.length; i++) {
                if(users[i].username === username && users[i].password === password) {
