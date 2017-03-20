@@ -1,6 +1,6 @@
 {
   "name": "git-server-windows",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Remote Git Server for Windows",
   "main": "git-server-windows.js",
   "dependencies": {
@@ -11,5 +11,9 @@
   },
   "devDependencies": {},
   "author": "Thomas Theiner",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devnull69/git-server-windows.git"
+  }
 }
