@@ -25,7 +25,7 @@ app.get('/', routes.index);
 
 app.get('/git/:reponame/info/refs', routes.getInfoRefs);
 app.post('/git/:reponame/git-receive-pack', auth.connect(basic), routes.postReceivePack);
-app.post('/git/:reponame/git-upload-pack', auth.connect(basic), routes.postUploadPack);
+app.post('/git/:reponame/git-upload-pack', routes.postUploadPack);
 
 app.listen(port, () => {
    console.log('Git Server listening on port ' + port + ' ...');

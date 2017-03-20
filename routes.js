@@ -23,7 +23,7 @@ exports.getInfoRefs = (req, res) => {
    prefix = prefix + hex.charAt(length & 0xf);
    res.write(prefix + packet + '0000');
    
-   var git = spawn("C:/Users/Thomas/NodeProjects/RemoteGit/" + service + ".cmd", ['--stateless-rpc', '--advertise-refs', 'C:/Users/Thomas/NodeProjects/RemoteGit/repos/' + reponame]);
+   var git = spawn(service + ".cmd", ['--stateless-rpc', '--advertise-refs', 'repos/' + reponame]);
    git.stdout.pipe(res);
    git.stderr.on('data', (data) => {
       console.log("stderr: " + data);
@@ -44,7 +44,7 @@ exports.postReceivePack = (req, res) => {
    res.setHeader('Cache-Control', 'no-cache, max-age=0, must-revalidate');
    res.setHeader('Content-Type', 'application/x-git-receive-pack-result');
 
-   var git = spawn("C:/Users/Thomas/NodeProjects/RemoteGit/git-receive-pack.cmd", ['--stateless-rpc', 'C:/Users/Thomas/NodeProjects/RemoteGit/repos/' + reponame]);
+   var git = spawn("git-receive-pack.cmd", ['--stateless-rpc', 'repos/' + reponame]);
    req.pipe(git.stdin);
    git.stdout.pipe(res);
    git.stderr.on('data', (data) => {
@@ -66,7 +66,7 @@ exports.postUploadPack = (req, res) => {
    res.setHeader('Cache-Control', 'no-cache, max-age=0, must-revalidate');
    res.setHeader('Content-Type', 'application/x-git-upload-pack-result');
 
-   var git = spawn("C:/Users/Thomas/NodeProjects/RemoteGit/git-upload-pack.cmd", ['--stateless-rpc', 'C:/Users/Thomas/NodeProjects/RemoteGit/repos/' + reponame]);
+   var git = spawn("git-upload-pack.cmd", ['--stateless-rpc', 'repos/' + reponame]);
    req.pipe(git.stdin);
    git.stdout.pipe(res);
    git.stderr.on('data', (data) => {
