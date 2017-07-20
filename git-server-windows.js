@@ -18,7 +18,7 @@ exports.User = function(config) {
 
 exports.server = function(config) {
    var config = config || {};
-   port = config.port || 8080;
+   port = config.port || 9481;
    baseURL = config.baseURL || "/git";
    repoDir = config.repoDir || "repos";
    repositories = config.repositories;
@@ -34,9 +34,16 @@ exports.server = function(config) {
    app.post(baseURL + '/:reponame/git-receive-pack', checkAuth, postReceivePack);
    app.post(baseURL + '/:reponame/git-upload-pack', postUploadPack);
 
-   app.listen(port, () => {
-      console.log('Git Server listening on port ' + port + ' ...');
-   });
+   if (config.https) {
+      var httpsServer = require('https').createServer(config.https, app);
+      httpsServer.listen(port, () => {
+         console.log('Git Server with SSL listening on port ' + port + ' ...');
+      });
+   } else {
+      app.listen(port, () => {
+         console.log('Git Server listening on port ' + port + ' ...');
+      });
+   }
 };
 
 //
@@ -100,8 +107,20 @@ function getInfoRefs(req, res) {
    prefix = prefix + hex.charAt(length >> 4 & 0xf);
    prefix = prefix + hex.charAt(length & 0xf);
    res.write(prefix + packet + '0000');
+
+   var action = "";
+   switch (service) {
+      case "git-upload-pack": action = "upload-pack"; break;
+      case "git-receive-pack": action = "receive-pack"; break;
+   }
+
+   var git;
+   if (action) {
+      git = spawn("git", [action, '--stateless-rpc', '--advertise-refs', repoDir + "/" + reponame]);
+   } else {
+      git = spawn(service + ".cmd", ['--stateless-rpc', '--advertise-refs', repoDir + "/" + reponame]);
+   }
    
-   var git = spawn(service + ".cmd", ['--stateless-rpc', '--advertise-refs', repoDir + "/" + reponame]);
    git.stdout.pipe(res);
    git.stderr.on('data', (data) => {
       console.log("stderr: " + data);
@@ -122,7 +141,7 @@ function postReceivePack(req, res) {
    res.setHeader('Cache-Control', 'no-cache, max-age=0, must-revalidate');
    res.setHeader('Content-Type', 'application/x-git-receive-pack-result');
 
-   var git = spawn("git-receive-pack.cmd", ['--stateless-rpc', repoDir + "/" + reponame]);
+   var git = spawn("git", ['receive-pack', '--stateless-rpc', repoDir + "/" + reponame]);
    req.pipe(git.stdin);
    git.stdout.pipe(res);
    git.stderr.on('data', (data) => {
@@ -144,7 +163,7 @@ function postUploadPack(req, res) {
    res.setHeader('Cache-Control', 'no-cache, max-age=0, must-revalidate');
    res.setHeader('Content-Type', 'application/x-git-upload-pack-result');
 
-   var git = spawn("git-upload-pack.cmd", ['--stateless-rpc', repoDir + "/" + reponame]);
+   var git = spawn("git", ['upload-pack', '--stateless-rpc', repoDir + "/" + reponame]);
    req.pipe(git.stdin);
    git.stdout.pipe(res);
    git.stderr.on('data', (data) => {
