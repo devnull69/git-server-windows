@@ -74,6 +74,7 @@ The git server can be configured using a parameter object on creation:
 
 ```js
 {
+   ip: '127.0.0.1',
    port: 8080,
    baseURL: '/git',
    repoDir: 'repos',
@@ -82,7 +83,10 @@ The git server can be configured using a parameter object on creation:
 }
 ```
 
-By default the server will be started on port 8080, using `/git` as the base URL, `repos` as the subfolder name of your repositories and an empty user list. All of the subfolders of `repos` will be used as repositories.
+By default the server will be started on address 127.0.0.1:8080, using `/git` as the base URL, `repos` as the subfolder name of your repositories and an empty user list. All of the subfolders of `repos` will be used as repositories.
+
+### ip
+The `ip` configuration parameter is used to determine the correct ip, in case multiple network adapters (and therefore ips) are associated with the host machine.
 
 ### baseURL
 
