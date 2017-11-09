@@ -6,6 +6,7 @@ var child_process = require('child_process');
 var spawn = child_process.spawn;
 var zlib = require('zlib')
 
+var ip;
 var port;
 var baseURL;
 var repoDir;
@@ -19,6 +20,7 @@ exports.User = function(config) {
 
 exports.server = function(config) {
    var config = config || {};
+   ip = config.ip || "127.0.0.1";
    port = config.port || 8080;
    baseURL = config.baseURL || "/git";
    repoDir = config.repoDir || "repos";
@@ -35,8 +37,8 @@ exports.server = function(config) {
    app.post(baseURL + '/:reponame/git-receive-pack', checkAuth, postReceivePack);
    app.post(baseURL + '/:reponame/git-upload-pack', postUploadPack);
 
-   app.listen(port, () => {
-      console.log('Git Server listening on port ' + port + ' ...');
+   app.listen(port, ip, () => {
+      console.log('Git Server listening on ' + ip + ':' + port);
    });
 };
 
