@@ -130,10 +130,11 @@ function postReceivePack(req, res) {
   res.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate");
   res.setHeader("Content-Type", "application/x-git-receive-pack-result");
 
-  var git = spawn("git-receive-pack.cmd", [
-    "--stateless-rpc",
-    repoDir + "/" + reponame,
-  ]);
+  var git = spawn(
+    "git-receive-pack.cmd",
+    ["--stateless-rpc", repoDir + "/" + reponame],
+    { shell: true }
+  );
   req.pipe(git.stdin);
   git.stdout.pipe(res);
   git.stderr.on("data", (data) => {
@@ -154,10 +155,11 @@ function postUploadPack(req, res) {
   res.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate");
   res.setHeader("Content-Type", "application/x-git-upload-pack-result");
 
-  var git = spawn("git-upload-pack.cmd", [
-    "--stateless-rpc",
-    repoDir + "/" + reponame,
-  ]);
+  var git = spawn(
+    "git-upload-pack.cmd",
+    ["--stateless-rpc", repoDir + "/" + reponame],
+    { shell: true }
+  );
   req.pipe(git.stdin);
   git.stdout.pipe(res);
   git.stderr.on("data", (data) => {
