@@ -4,6 +4,7 @@ var methodOverride = require("method-override");
 var auth = require("http-auth");
 var child_process = require("child_process");
 var spawn = child_process.spawn;
+var zlib = require("zlib");
 
 var port;
 var baseURL;
